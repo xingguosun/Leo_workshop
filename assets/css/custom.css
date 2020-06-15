@@ -131,7 +131,7 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    flex: 0 0 5rem;
+    /* flex: 0 0 5rem; */
     margin: 0 0 0 .5rem;
     height: auto;
     font-size: .75rem;
@@ -448,6 +448,7 @@
 }
 .info .payment-methods img{
     width: 8rem;
+    height: min-intrinsic;
 }
 .payment-methods img.postnl{
     width: 3rem; 

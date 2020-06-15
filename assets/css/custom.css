@@ -350,6 +350,7 @@
     .payment-methods img.postnl{
         width: 2rem !important; 
         margin-left: 1rem !important;
+        margin: auto 0;
     }
     .other-info{
         padding: 5px 0 !important;
@@ -423,6 +424,9 @@
     border-radius: 3px;
     background: rgba(71,178,228,0.8);
     -webkit-box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+}
+::-webkit-scrollbar-thumb:hover{
+    background: rgba(71,178,228,1);
 }
 
 

@@ -28,7 +28,7 @@
   <!-- Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
   <link href="assets/css/custom.css" rel="stylesheet">
-
+  <link href="assets/css/custom575.css" rel="stylesheet" media="screen and (max-width: 575px)"> 
 </head>
 
 <body>
@@ -83,7 +83,7 @@
               <span>QR code aanmaken</span>
             </a>
           </div>
-          <div class="d-lg-flex itemlist">
+          <div id="itemlist" class="d-lg-flex itemlist">
             <p href="#" class="btn ">
               <a href="#" class="edit-btn">
                 <i class="icofont-ui-edit"></i>
@@ -125,13 +125,16 @@
         <div class="order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
           <div class="display ">
             <!-- animated -->
-            <img src="assets/img/model/TZZ0001A.png" class="img-fluid model" alt="">
-            <div id="items" class="">
-              <img src="assets/img/symbol/textimg_y.png"/>
-              <img src="assets/img/symbol/keepcalm.png"/>
-              <img src="assets/img/symbol/and.png"/>
-              <img src="assets/img/symbol/drinkbeer.png"/>
+            <img id="main-image" src="assets/img/model/TZZ0001A.png" class="img-fluid model" alt="">
+            <div id="draggable-area">
+              <div id="items" class="">
+                <img src="assets/img/symbol/textimg_y.png"/>
+                <img src="assets/img/symbol/keepcalm.png"/>
+                <img src="assets/img/symbol/and.png"/>
+                <img src="assets/img/symbol/drinkbeer.png"/>
+              </div>
             </div>
+            
           </div>
           <div class="types d-lg-flex">
             <div class="sides d-lg-flex">
@@ -499,7 +502,62 @@
   <script type="module">
     import interact from 
     'https://cdn.interactjs.io/v1.9.19/interactjs/index.js';
+    var X = $('#main-image').offset().left;
+    var Y = $('#main-image').offset().top;
+    console.log('X,Y: '+X+','+Y);
+    var width = $('#main-image').width();
+    var height = $('#main-image').height();
+    console.log('width,height: '+width+','+height);
+
     interact('#items img')
+      .resizable({
+        // resize from all edges and corners
+        edges: { left: false, right: false, bottom: true, top: false },
+        modifiers: [
+          // keep the edges inside the parent
+          interact.modifiers.restrictEdges({
+            outer: 'parent'
+          }),
+          // minimum size
+          interact.modifiers.restrictSize({
+            min: { 
+              width: 30, 
+              // height: 50 
+            }
+          }),
+          interact.modifiers.aspectRatio({
+            // make sure the width is always double the height
+            ratio: 'preserve',
+            // also restrict the size by nesting another modifier
+            modifiers: [
+              interact.modifiers.restrictSize({ max: 'parent' })
+            ]
+          })
+        ],
+        listeners: {
+          move (event) {
+            var target = event.target
+            var x = (parseFloat(target.getAttribute('data-x')) || 0)
+            var y = (parseFloat(target.getAttribute('data-y')) || 0)
+
+            // update the element's style
+            target.style.width = event.rect.width + 'px'
+            target.style.height = event.rect.height + 'px'
+
+            // translate when resizing from top or left edges
+            x += event.deltaRect.left
+            y += event.deltaRect.top
+
+            target.style.webkitTransform = target.style.transform =
+              'translate(' + x + 'px,' + y + 'px)'
+
+            target.setAttribute('data-x', x)
+            target.setAttribute('data-y', y)
+            target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height)
+          }
+        },
+        inertia: false
+      })
       .draggable({
         // enable inertial throwing
         inertia: true,
@@ -507,7 +565,8 @@
         modifiers: [
           interact.modifiers.restrictRect({
             restriction: 'parent',
-            endOnly: true
+            // restriction: '#draggable-area',
+            // endOnly: true
           })
         ],
         // enable autoScroll
@@ -545,6 +604,21 @@
 
     // this function is used later in the resizing and gesture demos
     window.dragMoveListener = dragMoveListener
+    
+    $(document).mouseup(function(e){
+      var _con = $('#itemlist');
+      if(!_con.is(e.target) && _con.has(e.target).length === 0){
+        var isMobile = /Android|webOS|iPhone|iPad|BlackBerry/i.test(navigator.userAgent)
+        if (isMobile) {
+          _con.removeClass("phone-display");
+        }
+      }else{
+        _con.addClass("phone-display");
+      }
+    });
+    $(function() {
+     
+    });
   </script>
 </body>
 

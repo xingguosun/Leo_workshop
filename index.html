@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <style>
+            .drag{
+                border: 1px solid #000;
+                width: 100px;
+                position: absolute;
+				top: 0;
+				left: 0;
+				width: 100px;
+				height: 100px;
+				background: #bbbbbb;
+				touch-action: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="drag" id="div2">ttt</div>
+        </div>
+    </body>
+    <!-- <script src="./assets/js/interact2.js"></script> -->
+    <script type="module">
+        import interact from './assets/js/interact.js';
+        interact.constructor({element:".drag", outerElement: "#draggable-area"});
+        interact.display();
+    </script>
+</html>
